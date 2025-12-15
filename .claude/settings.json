@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(pwd:*)",
+      "Bash(cd:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(./.claude/scripts/fetch-lesson.sh:*)",
+      "Bash(./.claude/scripts/list-available-lessons.sh:*)",
+      "Bash(node:*)",
+      "Bash(npm test:*)",
+      "Write(.teacher/**)",
+      "Write(**/.teacher/**)",
+      "Edit(.teacher/**)",
+      "Edit(**/.teacher/**)"
+    ]
+  }
+}
