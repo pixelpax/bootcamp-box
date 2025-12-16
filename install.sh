@@ -27,6 +27,9 @@ else
     fi
 fi
 
+# Make scripts executable
+chmod +x ./bb ./install.sh ./.claude/scripts/*.sh 2>/dev/null || true
+
 echo ""
 echo "✓ Setup complete!"
 echo ""

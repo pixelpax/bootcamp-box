@@ -1,18 +1,10 @@
 #!/bin/bash
-# List available lessons in a section/unit
-# Usage: ./list-available-lessons.sh fundamentals/01-terminal-basics
+# List all available lessons in the curriculum
+# Shows the full hierarchy: section/unit/lesson
 #
 # Dev mode: Set BOOTCAMP_DEV=1 or create .dev file to list from local content/
 
 set -e
-
-UNIT_PATH="$1"
-
-if [ -z "$UNIT_PATH" ]; then
-    echo "Usage: $0 <section/unit>"
-    echo "Example: $0 fundamentals/01-terminal-basics"
-    exit 1
-fi
 
 # Check for dev mode: env var or .dev file
 if [ -n "$BOOTCAMP_DEV" ] || [ -f ".dev" ]; then
@@ -30,9 +22,38 @@ if [ -n "$BOOTCAMP_DEV" ] || [ -f ".dev" ]; then
         exit 1
     fi
 
-    echo "[DEV MODE] Listing from $CONTENT_DIR/$UNIT_PATH"
-    ls -1 "$CONTENT_DIR/$UNIT_PATH" | sort
+    echo "[DEV MODE] Available lessons:"
+    echo ""
+
+    # List all lessons with hierarchy
+    for section in "$CONTENT_DIR"/*/; do
+        section_name=$(basename "$section")
+        echo "$section_name/"
+        for unit in "$section"*/; do
+            [ -d "$unit" ] || continue
+            unit_name=$(basename "$unit")
+            echo "  $unit_name/"
+            for lesson in "$unit"*/; do
+                [ -d "$lesson" ] || continue
+                lesson_name=$(basename "$lesson")
+                echo "    $lesson_name"
+            done
+        done
+    done
 else
-    # Production: list from GitHub
-    gh api "repos/pixelpax/code-chode/contents/content/$UNIT_PATH" --jq '.[].name' | sort
+    # Production: list from GitHub using tree API
+    echo "Available lessons:"
+    echo ""
+
+    gh api "repos/pixelpax/code-chode/git/trees/main?recursive=1" \
+        --jq '.tree[] | select(.path | startswith("content/")) | select(.type == "tree") | .path' \
+        | sed 's|^content/||' \
+        | grep -E '^[^/]+/[^/]+/[^/]+$' \
+        | sort \
+        | while read -r path; do
+            section=$(echo "$path" | cut -d'/' -f1)
+            unit=$(echo "$path" | cut -d'/' -f2)
+            lesson=$(echo "$path" | cut -d'/' -f3)
+            echo "$section/$unit/$lesson"
+        done
 fi

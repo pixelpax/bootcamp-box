@@ -5,27 +5,38 @@ Learn to code with your own AI tutor.
 ## Quick Start
 
 1. **Download**: [Click here to download](https://github.com/pixelpax/bootcamp-box/archive/main.zip) and unzip
-2. **Open terminal**: Navigate to the unzipped folder
-3. **Start Claude**: Run `claude` in your terminal
-4. **Begin**: Just say "let's start" or type `/start`
 
-## Requirements
+2. **Open Terminal**:
+   - **Mac**: Press `Cmd+Space`, type "Terminal", press Enter
+   - **Windows**: Press `Win`, type "PowerShell", press Enter
 
-- [Claude Code](https://claude.ai/code) installed
-- A terminal (Terminal.app on Mac, or any shell)
+3. **Navigate to the folder**:
+   ```
+   cd ~/Downloads/bootcamp-box-main
+   ```
+   (Or wherever you unzipped it)
+
+4. **Start Bootcamp Box**:
+   ```
+   bash bb
+   ```
+   This will install Claude Code if needed and start your first lesson.
+
+## What You'll Need
+- A computer (Mac, Windows, or Linux)
+- An internet connection
+- That's it! The setup script handles the rest.
 
 ## Commands
 
-- `/start` - Begin your journey or pick up where you left off
-- `/submit` - Submit your work for the current lesson
+Once you're in a session:
+- `/submit` - Submit your work for grading
 - `/next` - Move to the next lesson
 
-## What You'll Learn
+## Having Issues?
 
-Starting with the fundamentals:
-- Command line basics
-- File system navigation
-- Git essentials
-- And much more...
-
-Happy coding!
+If `bash bb` doesn't work, try:
+```
+bash install.sh
+bash bb
+```

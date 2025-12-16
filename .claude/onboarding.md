@@ -9,11 +9,10 @@ The student wants to begin or continue their learning journey.
    - How should I talk? Professional? Like we're friends? With dad jokes? With some bitter sarcasm? 
    - Any prior programming experience? (none / a little / some)
    - What makes you want to learn programming?
-   - Do they prefer detailed explanations or learn-by-doing?
 3. Create `.teacher/profile.md` with their answers
 4. Create `.teacher/notes_about_student.md` (your private notes, start empty)
 5. Create `.teacher/progress.json` with initial structure
-6. Fetch and present the first lesson
+6. Fetch the first lesson in the section "dev-setup" to begin. You can use `./list-available-lessons.sh` to see available lessons.
 
 ## If returning (profile exists):
 1. Welcome them back by name
