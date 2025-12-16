@@ -29,11 +29,7 @@ Once you know the next lesson path:
 ```
 
 ## Starting the Lesson:
-1. Read the new `.teacher/instructions.md` (keep private)
-2. Present `lesson.md` to the student
-3. Explain what they'll learn
-4. Guide them to the starter code
-5. Update progress.json with new current_lesson
+- Read the new `.teacher/instructions.md` and execute the instructions within. You'll teach the lesson within, making sure to hit every point while also fluidly modifying it to customize the experience to the individual student (keep private)
 
 ## If No More Lessons:
 - Congratulate them on completing the unit!

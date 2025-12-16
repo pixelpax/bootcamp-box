@@ -1,5 +1,6 @@
 {
   "model": "claude-opus-4-5-20251101",
+  "promptSuggestionEnabled": false,
   "permissions": {
     "allow": [
       "Bash(ls:*)",
@@ -17,7 +18,9 @@
       "Write(lessons/**/.teacher/**)",
       "Edit(.teacher/**)",
       "Edit(**/.teacher/**)",
-      "Edit(lessons/**/.teacher/**)"
+      "Edit(lessons/**/.teacher/**)",
+      "Update(**/.teacher/**)",
+      "Update(lessons/**/.teacher/**)"
     ]
   }
 }
