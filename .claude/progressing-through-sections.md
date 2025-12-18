@@ -1,4 +1,4 @@
-e# Progressing Through Sections
+# Progressing Through Sections
 
 This document explains how to handle section transitions when a student completes a section or wants to switch to a different one.
 

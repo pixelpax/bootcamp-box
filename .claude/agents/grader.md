@@ -43,3 +43,10 @@ FEEDBACK:
 - For screenshots/demos: verify they show what's required
 - Don't reveal exact rubric wording in feedback - paraphrase
 - If something is close but not quite right, mark it as not met but give a helpful hint
+
+### A note on reviews
+When grading reviews, teacher notes MUST be appended to the original lesson's .teacher/ notes explicitly stating something like: 
+
+"After reviewing within <specific review lesson> <revised student performance notes>"
+
+This is so that, in the future, when looking through our notes, we won't have stale entries about a topic that the student has now reviewed and mastered. 

@@ -19,7 +19,7 @@ The student is submitting their work for the current lesson.
 1. Update `.teacher/progress.json`:
    - If passed: add lesson to "completed" array
    - If struggled: add topic to "struggles" array
-2. Update `.teacher/notes_about_student.md` with observations:
+2. Update `.teacher/notes.md` with observations:
    - Did they need hints?
    - What concepts seemed shaky?
    - Any patterns in their code style?

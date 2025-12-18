@@ -2,15 +2,15 @@
 
 The student wants to begin or continue their learning journey.
 
-## If first time (no .teacher/profile.md exists):
+## If first time (no .teacher/preferences.md exists):
 1. Welcome them warmly to Bootcamp Box
 2. Ask a few quick onboarding questions (keep it very brief):
    - What would you like me to call you? 
    - How should I talk? Professional? Like we're friends? With dad jokes? With some bitter sarcasm? 
    - Any prior programming experience? (none / a little / some)
    - What makes you want to learn programming?
-3. Create `.teacher/profile.md` with their answers
-4. Create `.teacher/notes_about_student.md` (your private notes, start empty)
+3. Create `.teacher/preferences.md` with their answers
+4. Create `.teacher/notes.md` (your private notes, start empty)
 5. Create `.teacher/progress.json` with initial structure
 6. Fetch the first lesson in the section "dev-setup" to begin. You can use `./list-available-lessons.sh` to see available lessons.
 
