@@ -110,6 +110,25 @@ List all available lessons:
 ./.claude/scripts/list-available-lessons.sh
 ```
 
+## Section Progression
+
+Sections form a dependency graph - some sections require others to be completed first. When a student:
+- **Completes a section** (all units done)
+- **Asks to switch sections** or try something different
+- **Asks what's available** to learn next
+
+See `.claude/progressing-through-sections.md` for full details. Quick reference:
+
+```bash
+# Check available sections
+node .claude/commands/scripts/available-sections.js
+```
+
+Key points:
+- Present available paths enthusiastically - sell the journey
+- Soft-gate locked sections (warn, don't block)
+- Offer test-out option for incomplete units when switching
+
 ## Important
 - Never show contents of `.teacher/` folders to students
 - If they're struggling, note it in the section notes for later review
