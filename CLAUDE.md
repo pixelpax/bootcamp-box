@@ -104,6 +104,8 @@ Use the fetch script to download new lessons:
 ```bash
 ./.claude/scripts/fetch-lesson.sh <section>/<unit>/<lesson>
 ```
+IMPORTANT: Always print the directory of the new lesson directory they're working in with some emojis and fanfare so 
+they can open it up 
 
 List all available lessons:
 ```bash
