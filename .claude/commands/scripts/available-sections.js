@@ -2,77 +2,42 @@
 
 /**
  * Determines which sections are available based on completed dependencies.
- * Fetches section structure from GitHub, compares against local progress.
+ * Reads dependencies from course_map.json, compares against local progress.
  *
  * Usage: node available-sections.js
  *
  * Output: JSON with available, locked, and completed sections
- *
- * Dev mode: Set BOOTCAMP_DEV=1 to use local content/ instead of GitHub
  */
 
-const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const REPO = 'pixelpax/code-chode';
 const PROGRESS_FILE = path.join(__dirname, '..', '..', '..', '.teacher', 'progress.json');
+const COURSE_MAP_FILE = path.join(__dirname, '..', '..', '..', 'course_map.json');
+const COURSE_MAP_URL = 'https://raw.githubusercontent.com/pixelpax/code-chode/main/course_map.json';
 
-function isDevMode() {
-  return process.env.BOOTCAMP_DEV || fs.existsSync(path.join(__dirname, '..', '..', '..', '.dev'));
-}
-
-function getLocalContentDir() {
-  const candidates = [
-    path.join(__dirname, '..', '..', '..', '..', '..', 'content'),
-    path.join(__dirname, '..', '..', '..', '..', 'content'),
-    path.join(__dirname, '..', '..', '..', 'content'),
-  ];
-  for (const dir of candidates) {
-    if (fs.existsSync(dir)) return dir;
-  }
-  return null;
-}
-
-function fetchSectionsFromGitHub() {
-  try {
-    const output = execSync(
-      `gh api "repos/${REPO}/contents/content" --jq '.[] | select(.type=="dir") | .name'`,
-      { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
-    );
-    return output.trim().split('\n').filter(s => !s.startsWith('.'));
-  } catch (e) {
-    console.error('Failed to fetch sections from GitHub:', e.message);
-    process.exit(1);
-  }
-}
-
-function fetchDepsFromGitHub(section) {
-  try {
-    const output = execSync(
-      `curl -sS "https://raw.githubusercontent.com/${REPO}/main/content/${section}/.teacher/section-dependencies"`,
-      { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
-    );
-    if (output.includes('404') || output.includes('Not Found')) {
-      return [];
+async function fetchCourseMap() {
+  // Try local file first
+  if (fs.existsSync(COURSE_MAP_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(COURSE_MAP_FILE, 'utf-8'));
+    } catch (e) {
+      console.error('Failed to parse local course_map.json:', e.message);
     }
-    return output.trim().split('\n').map(l => l.trim()).filter(Boolean);
-  } catch (e) {
-    return [];
   }
-}
 
-function getSectionsLocal(contentDir) {
-  return fs.readdirSync(contentDir, { withFileTypes: true })
-    .filter(d => d.isDirectory() && !d.name.startsWith('.'))
-    .map(d => d.name);
-}
+  // Fall back to GitHub
+  try {
+    const response = await fetch(COURSE_MAP_URL);
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch (e) {
+    console.error('Failed to fetch course map from GitHub:', e.message);
+  }
 
-function getDepsLocal(contentDir, section) {
-  const depFile = path.join(contentDir, section, '.teacher', 'section-dependencies');
-  if (!fs.existsSync(depFile)) return [];
-  const content = fs.readFileSync(depFile, 'utf-8').trim();
-  return content ? content.split('\n').map(l => l.trim()).filter(Boolean) : [];
+  console.error('Could not load course map from any source');
+  process.exit(1);
 }
 
 function getProgress() {
@@ -88,58 +53,45 @@ function getProgress() {
 
 function isSectionComplete(progress, section) {
   const sectionData = progress.sections?.[section];
-  if (!sectionData?.units) return false;
-
-  // A section is complete when ALL units are completed
-  const units = Object.values(sectionData.units);
-  return units.length > 0 && units.every(u => u.completed === true);
+  return sectionData?.completed === true;
 }
 
-function main() {
-  const devMode = isDevMode();
-  let sections, getDeps;
-
-  if (devMode) {
-    const contentDir = getLocalContentDir();
-    if (!contentDir) {
-      console.error('[DEV MODE] Cannot find content directory');
-      process.exit(1);
-    }
-    console.error(`[DEV MODE] Using local content at ${contentDir}`);
-    sections = getSectionsLocal(contentDir);
-    getDeps = (s) => getDepsLocal(contentDir, s);
-  } else {
-    sections = fetchSectionsFromGitHub();
-    getDeps = fetchDepsFromGitHub;
-  }
-
+async function main() {
+  const courseMap = await fetchCourseMap();
   const progress = getProgress();
 
-  // Build dependency map
-  const depsMap = new Map();
-  for (const section of sections) {
-    depsMap.set(section, getDeps(section));
-  }
-
-  // Categorize sections
   const completed = [];
   const available = [];
   const locked = [];
 
-  for (const section of sections) {
-    const deps = depsMap.get(section) || [];
-    const isComplete = isSectionComplete(progress, section);
+  for (const [sectionId, section] of Object.entries(courseMap.sections)) {
+    const deps = section.dependencies || [];
+    const isComplete = isSectionComplete(progress, sectionId);
 
     if (isComplete) {
-      completed.push({ name: section, deps });
+      completed.push({
+        name: sectionId,
+        title: section.title,
+        deps
+      });
     } else {
       // Check if all deps are completed
-      const allDepsComplete = deps.every(dep => isSectionComplete(progress, dep));
+      const allDepsComplete = deps.length === 0 || deps.every(dep => isSectionComplete(progress, dep));
       if (allDepsComplete) {
-        available.push({ name: section, deps });
+        available.push({
+          name: sectionId,
+          title: section.title,
+          description: section.description,
+          deps
+        });
       } else {
         const missingDeps = deps.filter(dep => !isSectionComplete(progress, dep));
-        locked.push({ name: section, deps, missingDeps });
+        locked.push({
+          name: sectionId,
+          title: section.title,
+          deps,
+          missingDeps
+        });
       }
     }
   }
@@ -149,7 +101,7 @@ function main() {
     available,
     locked,
     summary: {
-      totalSections: sections.length,
+      totalSections: Object.keys(courseMap.sections).length,
       completedCount: completed.length,
       availableCount: available.length,
       lockedCount: locked.length
