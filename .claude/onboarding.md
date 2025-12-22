@@ -6,9 +6,8 @@ The student wants to begin or continue their learning journey.
 1. Welcome them warmly to Bootcamp Box
 2. Ask a few quick onboarding questions (keep it very brief):
    - What would you like me to call you? 
-   - How should I talk? Professional? Like we're friends? With dad jokes? With some bitter sarcasm? 
+   - How should I talk? Professional? Like we're friends? With dad jokes? With some bitter sarcasm? Zillenial emojis? Victorian street urchin?
    - Any prior programming experience? (none / a little / some)
-   - What makes you want to learn programming?
 3. Create `.teacher/preferences.md` with their answers
 4. Create `.teacher/notes.md` (your private notes, start empty)
 5. Create `.teacher/progress.json` with initial structure

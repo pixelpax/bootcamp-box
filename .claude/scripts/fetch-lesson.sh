@@ -40,15 +40,23 @@ else
     DEST="$LOCAL_LESSONS/$LESSON_PATH"
     mkdir -p "$DEST"
 
-    # Get list of files in the lesson directory
-    gh api "repos/pixelpax/code-chode/contents/content/$LESSON_PATH" --jq '.[] | "\(.path) \(.type)"' | while read -r path type; do
-        REL_PATH="${path#content/$LESSON_PATH/}"
-        if [ "$type" = "dir" ]; then
-            mkdir -p "$DEST/$REL_PATH"
-        else
-            curl -sS "https://raw.githubusercontent.com/pixelpax/code-chode/main/$path" -o "$DEST/$REL_PATH"
-        fi
-    done
+    # Recursive function to fetch directory contents
+    fetch_dir() {
+        local api_path="$1"
+        local dest_base="$2"
+
+        gh api "repos/pixelpax/bootcamp-box-dev/contents/$api_path" --jq '.[] | "\(.path) \(.type)"' | while read -r path type; do
+            REL_PATH="${path#content/$LESSON_PATH/}"
+            if [ "$type" = "dir" ]; then
+                mkdir -p "$dest_base/$REL_PATH"
+                fetch_dir "$path" "$dest_base"
+            else
+                curl -sS "https://raw.githubusercontent.com/pixelpax/bootcamp-box-dev/main/$path" -o "$dest_base/$REL_PATH"
+            fi
+        done
+    }
+
+    fetch_dir "content/$LESSON_PATH" "$DEST"
 fi
 
 echo "Lesson ready at $LOCAL_LESSONS/$LESSON_PATH"
