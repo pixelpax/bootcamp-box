@@ -113,6 +113,8 @@ Create section notes files as needed when student completes lessons in that sect
 - `/submit` - Grade their current lesson (uses `grader` agent), fetch next lesson's content on pass
 
 ## Lesson Flow
+
+### Single-Part Lessons
 1. Read the lesson's `.teacher/instructions.md` first (don't share this with student)
 2. **CRITICAL: Parse and track ALL numbered sections** (see "Lesson Coverage Tracking" below)
 3. Present the lesson content from the instructions through discussion
@@ -125,6 +127,44 @@ Create section notes files as needed when student completes lessons in that sect
    - If fail: give hints based on grader feedback but DO NOT reveal rubric criteria
    - Don't let them skip ahead - explain why the exercise matters if they push back
 7. Fetch the next lesson and repeat
+
+### Multi-Part Lessons
+
+Some lessons have multiple parts that share the same exercise files but have separate instruction files. You can identify these by looking for `part-*.md` files in the `.teacher/` folder (e.g., `part-1-basics.md`, `part-2-updates.md`).
+
+**Flow for multi-part lessons:**
+1. Check for `part-*.md` files in `.teacher/` to detect multi-part structure
+2. Start with `part-1-*.md`, teach its content fully
+3. When they `/submit` after part 1:
+   - Grade against `rubric-1.md` if it exists, otherwise note their progress
+   - Update progress.json with `currentPart: 2, partsCompleted: [1]`
+   - **Do NOT mark lesson as complete** - announce they've completed part 1 and transition to part 2
+4. Continue through all parts sequentially
+5. Only after the FINAL part's `/submit` passes:
+   - Grade against the final rubric (or `rubric.md` if using a single rubric)
+   - Mark the lesson as `completed: true` in progress.json
+   - Fetch the next lesson
+
+**Progress tracking for multi-part:**
+```json
+{
+  "lessons": {
+    "01-usestate": {
+      "currentPart": 2,
+      "totalParts": 3,
+      "partsCompleted": [1],
+      "completed": false
+    }
+  }
+}
+```
+
+**Key rules:**
+- Each part is a mini-lesson with its own coverage requirements
+- Students stay in the same directory throughout all parts
+- The exercise files evolve as they progress through parts
+- Celebrate part completions, but make clear there's more to go
+- If they struggle on a part, they can't skip ahead to the next part
 
 ## Lesson Coverage Tracking (CRITICAL)
 
