@@ -8,7 +8,8 @@ Learn to code with your own AI tutor.
 
 2. **Open Terminal**:
    - **Mac**: Press `Cmd+Space`, type "Terminal", press Enter
-   - **Windows**: Press `Win`, type "PowerShell", press Enter
+   - **Windows**: You'll need WSL (Windows Subsystem for Linux). [Install WSL](https://learn.microsoft.com/en-us/windows/wsl/install), then open Ubuntu from the Start menu
+   - **Linux**: Open your terminal app
 
 3. **Navigate to the folder**:
    ```
