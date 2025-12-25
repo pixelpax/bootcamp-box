@@ -33,8 +33,7 @@ Built around the philosophy of learn by doing, Bootcamp Box keeps learners activ
 ## Commands
 
 Once you're in a session:
-- `/submit` - Submit your work for grading
-- `/next` - Move to the next lesson
+- `/submit` - Submit your work for grading (moves to next lesson on pass)
 
 ## Course Map
 

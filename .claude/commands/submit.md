@@ -24,7 +24,7 @@ The student is submitting their work for the current lesson.
    - What concepts seemed shaky?
    - Any patterns in their code style?
 3. Ask a quick follow-up question to verify understanding
-4. Let them know they can `/next` when ready
+4. Fetch the next lesson and begin teaching it
 
 ## If They Don't Pass:
 - Be encouraging, not discouraging
